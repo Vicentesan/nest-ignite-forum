@@ -37,5 +37,5 @@ Authorization: Bearer {{authToken}}
 ###
 
 # @name fetch-recent-questions
-GET {{baseUrl}}/questions?page=3
+GET {{baseUrl}}/questions
 Authorization: Bearer {{authToken}}
