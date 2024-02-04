@@ -63,12 +63,15 @@ describe('Fetch Recent Questions Controller (e2e)', () => {
       .send()
 
     expect(response.statusCode).toBe(200)
-    expect(response.body).toEqual({
-      questions: [
-        expect.objectContaining({ title: 'Question 01' }),
-        expect.objectContaining({ title: 'Question 02' }),
-        expect.objectContaining({ title: 'Question 03' }),
-      ],
-    })
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        success: true,
+        questions: [
+          expect.objectContaining({ title: 'Question 01' }),
+          expect.objectContaining({ title: 'Question 02' }),
+          expect.objectContaining({ title: 'Question 03' }),
+        ],
+      }),
+    )
   })
 })

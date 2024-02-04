@@ -15,7 +15,10 @@ type RegisterStudentUseCaseResponse = Either<
   StudentAlreadyExistsError,
   {
     success: boolean
-    student: Student
+    student: {
+      name: string
+      email: string
+    }
   }
 >
 
@@ -48,7 +51,10 @@ export class RegisterStudentUseCase {
 
     return right({
       success: true,
-      student,
+      student: {
+        name: student.name,
+        email: student.email,
+      },
     })
   }
 }
