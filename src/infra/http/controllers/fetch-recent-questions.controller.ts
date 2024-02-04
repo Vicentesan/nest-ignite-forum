@@ -1,5 +1,11 @@
 import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
-import { Controller, Get, Query, UseGuards } from '@nestjs/common'
+import {
+  BadRequestException,
+  Controller,
+  Get,
+  Query,
+  UseGuards,
+} from '@nestjs/common'
 import { ZodValidationPipe } from '../pipes/zod-validation.pipe'
 
 import { FetchRecentQuestionsUseCase } from '@/domain/forum/application/use-cases/fetch-recent-questions'
@@ -28,7 +34,7 @@ export class FetchRecentQuestionsController {
       page,
     })
 
-    if (result.isLeft()) throw new Error('')
+    if (result.isLeft()) throw new BadRequestException()
 
     const { success, questions } = result.value
 
