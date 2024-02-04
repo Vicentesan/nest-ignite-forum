@@ -23,7 +23,11 @@ describe('Register Student', () => {
     expect(result.isRight()).toBe(true)
     expect(result.value).toEqual(
       expect.objectContaining({
-        student: inMemoryStudentsRepository.items[0],
+        student: expect.objectContaining({
+          name: 'John Doe',
+          email: 'Johndoe@example.com',
+        }),
+        success: true,
       }),
     )
   })
