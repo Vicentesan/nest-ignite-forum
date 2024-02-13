@@ -1,0 +1,59 @@
+import { AppModule } from '@/infra/app.module'
+import { PrismaService } from '@/infra/database/prisma/prisma.service'
+import { INestApplication } from '@nestjs/common'
+import { JwtService } from '@nestjs/jwt'
+import { Test } from '@nestjs/testing'
+import request from 'supertest'
+
+let app: INestApplication
+let prisma: PrismaService
+let jwt: JwtService
+
+describe('Get Question By Slug (e2e)', () => {
+  beforeAll(async () => {
+    const moduleRef = await Test.createTestingModule({
+      imports: [AppModule],
+    }).compile()
+
+    app = moduleRef.createNestApplication()
+
+    prisma = moduleRef.get(PrismaService)
+    jwt = moduleRef.get(JwtService)
+
+    await app.init()
+  })
+
+  test('[GET] /questions/:slug', async () => {
+    const newUser = await prisma.user.create({
+      data: {
+        name: 'John Doe',
+        email: 'Johndoe@example.com',
+        password_hash: '123456',
+      },
+    })
+
+    const accessToken = jwt.sign({ sub: newUser.id })
+
+    await prisma.question.create({
+      data: {
+        authorId: newUser.id,
+        slug: 'question-01',
+        title: 'Question 01',
+        content: 'Question 01 Cotent',
+      },
+    })
+
+    const response = await request(app.getHttpServer())
+      .get('/questions/question-01')
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send()
+
+    expect(response.statusCode).toBe(200)
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        success: true,
+        question: expect.objectContaining({ title: 'Question 01' }),
+      }),
+    )
+  })
+})
