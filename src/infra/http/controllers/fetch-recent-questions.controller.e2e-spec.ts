@@ -35,15 +35,15 @@ describe('Fetch Recent Questions Controller (e2e)', () => {
     const accessToken = jwt.sign({ sub: newUser.id.toString() })
 
     await Promise.all([
-      questionFactory.makePrismaQuestion({
+      await questionFactory.makePrismaQuestion({
         authorId: newUser.id,
         title: 'Question 01',
       }),
-      questionFactory.makePrismaQuestion({
+      await questionFactory.makePrismaQuestion({
         authorId: newUser.id,
         title: 'Question 02',
       }),
-      questionFactory.makePrismaQuestion({
+      await questionFactory.makePrismaQuestion({
         authorId: newUser.id,
         title: 'Question 03',
       }),
