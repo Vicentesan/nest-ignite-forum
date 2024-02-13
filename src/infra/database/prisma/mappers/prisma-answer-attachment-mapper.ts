@@ -1,0 +1,17 @@
+import { UniqueEntityId } from '@/core/entities/unique-entity-id'
+import { AnswerAttachments } from '@/domain/forum/enterprise/entities/answer-attachment'
+import { Attachment as PrismaAttachment } from '@prisma/client'
+
+export class PrismaAnswerAttachmentMapper {
+  static toDomain(raw: PrismaAttachment): AnswerAttachments {
+    if (!raw.answerId) throw new Error('Invalid attachment type')
+
+    return AnswerAttachments.create(
+      {
+        attachmentId: new UniqueEntityId(raw.id),
+        answerId: new UniqueEntityId(raw.answerId),
+      },
+      new UniqueEntityId(raw.id),
+    )
+  }
+}

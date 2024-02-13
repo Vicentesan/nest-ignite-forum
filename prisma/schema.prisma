@@ -24,6 +24,7 @@ model User {
 
   questions Question[]
   answers   Answer[]
+  comments  Comment[]
 
   @@map("users")
 }
@@ -42,7 +43,9 @@ model Question {
   bestAnswerId String? @unique
   bestAnswer   Answer? @relation("bestAnswer", fields: [bestAnswerId], references: [id])
 
-  answers Answer[]
+  answers     Answer[]
+  comments    Comment[]
+  attachments Attachment[]
 
   @@map("questions")
 }
@@ -58,8 +61,42 @@ model Answer {
 
   bestAnswerOn Question? @relation("bestAnswer")
 
-  questionId String
-  question   Question @relation(fields: [questionId], references: [id])
+  questionId  String
+  question    Question     @relation(fields: [questionId], references: [id])
+  comments    Comment[]
+  attachments Attachment[]
 
   @@map("answers")
+}
+
+model Comment {
+  id        String    @id @default(uuid())
+  content   String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id])
+
+  questionId String?
+  question   Question? @relation(fields: [questionId], references: [id])
+
+  answerId String?
+  answer   Answer? @relation(fields: [answerId], references: [id])
+
+  @@map("comments")
+}
+
+model Attachment {
+  id    String @id @default(uuid())
+  title String
+  url   String
+
+  questionId String?
+  question   Question? @relation(fields: [questionId], references: [id])
+
+  answerId String?
+  answer   Answer? @relation(fields: [answerId], references: [id])
+
+  @@map("attachments")
 }
