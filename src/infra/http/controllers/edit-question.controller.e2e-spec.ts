@@ -49,7 +49,7 @@ describe('Edit Question (e2e)', () => {
         content: 'Edited Question Cotent',
       })
 
-    expect(response.statusCode).toBe(200)
+    expect(response.statusCode).toBe(204)
 
     const questionOnDatabase = await prisma.question.findUnique({
       where: {

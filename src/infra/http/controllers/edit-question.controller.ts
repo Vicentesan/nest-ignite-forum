@@ -4,6 +4,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  HttpCode,
   Param,
   Put,
 } from '@nestjs/common'
@@ -26,6 +27,7 @@ export class EditQuestionController {
   constructor(private editQuestion: EditQuestionUseCase) {}
 
   @Put()
+  @HttpCode(204)
   async handle(
     @Body(bodyValidationPipe) body: EditQuestionBodySchema,
     @CurrentUser() user: UserPayload,
