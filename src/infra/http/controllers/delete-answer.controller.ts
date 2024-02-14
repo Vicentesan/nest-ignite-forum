@@ -8,6 +8,7 @@ export class DeleteAnswerController {
   constructor(private deleteAnswer: DeleteAnswerUseCase) {}
 
   @Delete()
+  @HttpCode(204)
   async handle(
     @CurrentUser() user: UserPayload,
     @Param('id') answerId: string,
