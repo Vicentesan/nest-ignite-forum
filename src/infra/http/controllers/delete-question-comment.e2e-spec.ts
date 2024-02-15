@@ -48,7 +48,7 @@ describe('Delete Question Comment (e2e)', () => {
       authorId: newUser.id,
     })
 
-    const newComment = await questionCommentFactory.makePrismaQuestion({
+    const newComment = await questionCommentFactory.makePrismaQuestionComment({
       questionId: newQuestion.id,
       authorId: newUser.id,
     })
