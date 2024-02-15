@@ -68,7 +68,7 @@ describe('Fetch Question Comment (e2e)', () => {
     expect(response.body).toEqual(
       expect.objectContaining({
         success: true,
-        comments: [
+        questionComments: [
           expect.objectContaining({ content: 'Comment 03' }),
           expect.objectContaining({ content: 'Comment 02' }),
           expect.objectContaining({ content: 'Comment 01' }),
