@@ -13,7 +13,7 @@ export abstract class Entity<Props> {
     this._id = id ?? new UniqueEntityId()
   }
 
-  public Equals(entity: Entity<unknown>): boolean {
+  public equals(entity: Entity<unknown>): boolean {
     return entity === this ?? entity.id === this._id
   }
 }

@@ -23,7 +23,7 @@ export class DomainEvents {
   private static removeAggregateFromMarkedDispatchList(
     aggregate: AggregateRoot<unknown>,
   ) {
-    const index = this.markedAggregates.findIndex((a) => a.Equals(aggregate))
+    const index = this.markedAggregates.findIndex((a) => a.equals(aggregate))
 
     this.markedAggregates.splice(index, 1)
   }
