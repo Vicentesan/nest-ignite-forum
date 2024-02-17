@@ -7,17 +7,19 @@ import { Test } from '@nestjs/testing'
 import { StudentFactory } from 'test/factories/make-student'
 
 import request from 'supertest'
+import { AttachmentFactory } from 'test/factories/make-attachment'
 
 let app: INestApplication
 let prisma: PrismaService
 let jwt: JwtService
 let studentFactory: StudentFactory
+let attachmentFacotry: AttachmentFactory
 
 describe('Create Question Controller (e2e)', () => {
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
-      providers: [StudentFactory],
+      providers: [StudentFactory, AttachmentFactory],
     }).compile()
 
     app = moduleRef.createNestApplication()
@@ -25,6 +27,7 @@ describe('Create Question Controller (e2e)', () => {
     prisma = moduleRef.get(PrismaService)
     jwt = moduleRef.get(JwtService)
     studentFactory = moduleRef.get(StudentFactory)
+    attachmentFacotry = moduleRef.get(AttachmentFactory)
 
     await app.init()
   })
@@ -34,12 +37,16 @@ describe('Create Question Controller (e2e)', () => {
 
     const accessToken = jwt.sign({ sub: newUser.id.toString() })
 
+    const attachment1 = await attachmentFacotry.makePrismaAttachment()
+    const attachment2 = await attachmentFacotry.makePrismaAttachment()
+
     const response = await request(app.getHttpServer())
       .post('/questions')
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
         title: 'Question title',
         content: 'Question Cotent',
+        attachments: [attachment1.id.toString(), attachment2.id.toString()],
       })
 
     expect(response.statusCode).toBe(201)
@@ -51,5 +58,13 @@ describe('Create Question Controller (e2e)', () => {
     })
 
     expect(questionOnDatabase).toBeTruthy()
+
+    const attachmentsOnDatabase = await prisma.attachment.findMany({
+      where: {
+        questionId: questionOnDatabase?.id,
+      },
+    })
+
+    expect(attachmentsOnDatabase).toHaveLength(2)
   })
 })
