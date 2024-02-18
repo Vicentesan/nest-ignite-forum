@@ -1,3 +1,4 @@
+import { FetchQuestionCommentsUseCase } from '@/domain/forum/application/use-cases/fetch-question-comments'
 import {
   BadRequestException,
   Controller,
@@ -5,11 +6,8 @@ import {
   Param,
   Query,
 } from '@nestjs/common'
-import { ZodValidationPipe } from '../pipes/zod-validation.pipe'
-import { FetchQuestionCommentsUseCase } from '@/domain/forum/application/use-cases/fetch-question-comments'
 import { z } from 'zod'
-import { CommentPresenter } from '../presenters/comment-presenter'
-import { CommentWithAuthor } from '@/domain/forum/enterprise/entities/value-object/comment-with-author'
+import { ZodValidationPipe } from '../pipes/zod-validation.pipe'
 import { CommentWithAuthorPresenter } from '../presenters/comment-with-author-presenter'
 
 const pageQuerySchema = z
