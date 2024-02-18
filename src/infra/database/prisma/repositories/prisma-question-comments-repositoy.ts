@@ -86,6 +86,6 @@ export class PrismaQuestionCommentsRepository
       skip: (page - 1) * perPage,
     })
 
-    return questionComments.map(PrismaCommentWithAuthorMapper.questionToDomain)
+    return questionComments.map(PrismaCommentWithAuthorMapper.toDomain)
   }
 }
