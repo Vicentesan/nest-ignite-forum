@@ -82,9 +82,18 @@ describe('Fetch Answer Comments (e2e)', () => {
       expect.objectContaining({
         success: true,
         answerComments: [
-          expect.objectContaining({ content: 'Comment 03' }),
-          expect.objectContaining({ content: 'Comment 02' }),
-          expect.objectContaining({ content: 'Comment 01' }),
+          expect.objectContaining({
+            content: 'Comment 03',
+            authorName: newUser.name,
+          }),
+          expect.objectContaining({
+            content: 'Comment 02',
+            authorName: newUser.name,
+          }),
+          expect.objectContaining({
+            content: 'Comment 01',
+            authorName: newUser.name,
+          }),
         ],
       }),
     )
