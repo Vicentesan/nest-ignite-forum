@@ -5,6 +5,8 @@ import { Injectable } from '@nestjs/common'
 import { PrismaAnswerMapper } from '../mappers/prisma-answer-mapper'
 import { PrismaService } from '../prisma.service'
 import { AnswerAttachmentsRepository } from '@/domain/forum/application/repositories/answer-attachments-repository'
+import { AnswerWithAuthor } from '@/domain/forum/enterprise/entities/value-object/answer-with-author'
+import { PrismaAnswerWithAuthorMapper } from '../mappers/prisma-answer-with-author-mapper'
 
 @Injectable()
 export class PrismaAnswerRepository implements AnswersRepository {
@@ -70,6 +72,34 @@ export class PrismaAnswerRepository implements AnswersRepository {
     })
 
     return answer.map(PrismaAnswerMapper.toDomain)
+  }
+
+  async findManyByQuestionIdWithAuthor(
+    questionId: string,
+    { page }: PaginationParams,
+  ): Promise<AnswerWithAuthor[]> {
+    const perPage = 20
+
+    const questionAnswers = await this.prisma.answer.findMany({
+      where: {
+        questionId,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      include: {
+        author: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+      take: perPage,
+      skip: (page - 1) * perPage,
+    })
+
+    return questionAnswers.map(PrismaAnswerWithAuthorMapper.toDomain)
   }
 
   async findById(answerId: string): Promise<Answer | null> {
