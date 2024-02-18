@@ -1,3 +1,4 @@
+import { FetchQuestionsAnswersUseCase } from '@/domain/forum/application/use-cases/fetch-question-answers'
 import {
   BadRequestException,
   Controller,
@@ -5,10 +6,9 @@ import {
   Param,
   Query,
 } from '@nestjs/common'
-import { ZodValidationPipe } from '../pipes/zod-validation.pipe'
-import { FetchQuestionsAnswersUseCase } from '@/domain/forum/application/use-cases/fetch-question-answers'
 import { z } from 'zod'
-import { AnswerPresenter } from '../presenters/answer-presenter'
+import { ZodValidationPipe } from '../pipes/zod-validation.pipe'
+import { AnswerWithAuthorPresenter } from '../presenters/answer-with-author-presenter'
 
 const pageQuerySchema = z
   .string()
@@ -39,6 +39,6 @@ export class FetchQuestionAnswersController {
 
     const { success, answers } = result.value
 
-    return { success, answers: answers.map(AnswerPresenter.present) }
+    return { success, answers: answers.map(AnswerWithAuthorPresenter.present) }
   }
 }
