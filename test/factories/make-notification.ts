@@ -5,6 +5,9 @@ import {
   NotificationProps,
   Notification,
 } from '@/domain/notification/enterprise/entities/notification'
+import { Injectable } from '@nestjs/common'
+import { PrismaService } from '@/infra/database/prisma/prisma.service'
+import { PrismaNotificationMapper } from '@/infra/database/prisma/mappers/prisma-notifications-mapper'
 
 export function MakeNotification(
   override: Partial<NotificationProps> = {},
@@ -21,4 +24,21 @@ export function MakeNotification(
   )
 
   return notification
+}
+
+@Injectable()
+export class NotificationFactory {
+  constructor(private prisma: PrismaService) {}
+
+  async makePrismaNotification(
+    data: Partial<NotificationProps> = {},
+  ): Promise<Notification> {
+    const notification = MakeNotification(data)
+
+    await this.prisma.notification.create({
+      data: PrismaNotificationMapper.toPrisma(notification),
+    })
+
+    return notification
+  }
 }
